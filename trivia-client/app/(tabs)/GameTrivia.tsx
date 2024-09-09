@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput } from 'react-native';
-import { firebase } from '../../config'
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
+import { firebase } from '../../config';
 
 const fetchGames = async () => {
   try {
-    const response = await fetch(
-      "https://games-duqziddcsa-uc.a.run.app",
-      { method: 'GET' }
-    );
+    const response = await fetch("https://games-duqziddcsa-uc.a.run.app", { method: 'GET' });
     const data = await response.json();
     console.log(data);
     return data;
@@ -107,16 +104,24 @@ const GameTrivia = () => {
         <Text style={styles.gameOverText}>Game Over</Text>
         <Text style={styles.scoreText}>Your Score: {score}</Text>
         <TextInput
+          style={styles.textInput}
           placeholder="Enter your name"
           value={name}
           onChangeText={setName}
         />
-        <Button
-          title={submitting ? "Submitting..." : "Submit Score"}
+        <TouchableOpacity
+          style={[styles.button, styles.submitButton]}
           onPress={submitScore}
           disabled={submitting}
-        />
-        <Button title="Restart" onPress={restartGame} />
+        >
+          <Text style={styles.buttonText}>{submitting ? "Submitting..." : "Submit Score"}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.restartButton]}
+          onPress={restartGame}
+        >
+          <Text style={styles.buttonText}>Restart</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -124,12 +129,15 @@ const GameTrivia = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.scoreText}>Score: {score}</Text>
+      <Text style={styles.scoreText}>Which game has the higher rating?</Text>
       {selectedGames.map(game => (
-        <Button
+        <TouchableOpacity
           key={game.id}
-          title={game.name as string}
+          style={styles.button}
           onPress={() => handleSelection(game)}
-        />
+        >
+          <Text style={styles.buttonText}>{game.name as string}</Text>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -140,15 +148,47 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#f5f5f5',
   },
   scoreText: {
     fontSize: 24,
     marginBottom: 20,
+    color: '#333',
   },
   gameOverText: {
     fontSize: 32,
     color: 'red',
     marginBottom: 20,
+  },
+  textInput: {
+    height: 40,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    width: '80%',
+  },
+  button: {
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+    marginVertical: 10,
+    alignItems: 'center',
+    width: '80%',
+    backgroundColor: '#007bff',
+  },
+  submitButton: {
+    backgroundColor: '#28a745',
+  },
+  restartButton: {
+    backgroundColor: '#dc3545',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

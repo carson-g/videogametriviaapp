@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   headerItem: {
     fontSize: 18,
     fontWeight: 'bold',
-    width: '33%', // Adjust width as needed
+    width: '33%',
     textAlign: 'center',
   },
   rankHeader: {
@@ -110,18 +110,18 @@ const styles = StyleSheet.create({
   rank: {
     fontSize: 18,
     fontWeight: 'bold',
-    width: '33%', // Adjust width as needed
+    width: '33%',
     textAlign: 'center',
   },
   name: {
     fontSize: 18,
-    width: '34%', // Adjust width as needed
+    width: '34%',
     textAlign: 'center',
   },
   score: {
     fontSize: 18,
     fontWeight: 'bold',
-    width: '33%', // Adjust width as needed
+    width: '33%',
     textAlign: 'center',
   },
   refreshButton: {

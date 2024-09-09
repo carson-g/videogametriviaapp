@@ -22,7 +22,10 @@ const HomePage = () => {
           Check out the leaderboard to see the top scores and find out who the best trivia players are!
         </Text>
         <Text style={styles.sectionDescription}>
-          Use the navigation bar below to explore the app!
+          Use the navigation bar below to explore the app.
+        </Text>
+        <Text style={styles.sectionDescription}>
+          App by: Carson Garner
         </Text>
       </View>
     </View>
