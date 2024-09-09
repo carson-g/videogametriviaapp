@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-exports.games = onRequest(async (req, response) => {
+exports.games = onRequest({cors: true}, async (req, response) => {
   const url = "https://id.twitch.tv/oauth2/token";
   const clientId = process.env.CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
@@ -76,7 +76,7 @@ exports.games = onRequest(async (req, response) => {
 
     response.status(200).json(randomGames);
   } catch (err) {
-    logger.error("Error in games function", err);
+    logger.error("Error in games function!", err);
     response.status(500).send("Internal Server Error");
   }
 });
