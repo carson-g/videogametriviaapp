@@ -76,7 +76,7 @@ exports.games = onRequest(async (req, response) => {
 
     response.status(200).json(randomGames);
   } catch (err) {
-    logger.error("Error in games function!", err);
+    logger.error("Error in games function", err);
     response.status(500).send("Internal Server Error");
   }
 });
