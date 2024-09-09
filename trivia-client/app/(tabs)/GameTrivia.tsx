@@ -4,7 +4,7 @@ import { View, Text, Button, StyleSheet, Alert, ActivityIndicator } from 'react-
 const fetchGames = async () => {
   try {
     const response = await fetch(
-      "http://127.0.0.1:5001/videogametrivia-49db3/us-central1/games",
+      "https://games-duqziddcsa-uc.a.run.app",
       { method: 'GET' }
     );
     const data = await response.json();
