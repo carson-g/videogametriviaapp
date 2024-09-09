@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput } from 'react-native';
+import { firebase } from '../../config'
 
 const fetchGames = async () => {
   try {
@@ -31,6 +32,8 @@ const GameTrivia = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [name, setName] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const initializeGame = async () => {
     setLoading(true);
@@ -68,6 +71,28 @@ const GameTrivia = () => {
     setGameOver(false);
   };
 
+  const submitScore = async () => {
+    if (name.trim() === '') {
+      Alert.alert('Error', 'Please enter your name.');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await firebase.firestore().collection('leaderboard').add({
+        name,
+        score,
+      });
+      Alert.alert('Success', 'Score submitted!');
+      setName('');
+      restartGame();
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Error', 'Failed to submit score. Please try again.');
+    }
+    setSubmitting(false);
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -81,6 +106,16 @@ const GameTrivia = () => {
       <View style={styles.container}>
         <Text style={styles.gameOverText}>Game Over</Text>
         <Text style={styles.scoreText}>Your Score: {score}</Text>
+        <TextInput
+          placeholder="Enter your name"
+          value={name}
+          onChangeText={setName}
+        />
+        <Button
+          title={submitting ? "Submitting..." : "Submit Score"}
+          onPress={submitScore}
+          disabled={submitting}
+        />
         <Button title="Restart" onPress={restartGame} />
       </View>
     );
