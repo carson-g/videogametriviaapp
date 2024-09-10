@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
 import { firebase } from '../../config';
+
 
 const fetchGames = async () => {
   try {
@@ -24,6 +25,8 @@ const getRandomGames = (games: { id: any; aggregated_rating: any; name?: string;
 };
 
 const GameTrivia = () => {
+  const Ref = useRef<number | null>(null);
+  const [timer, setTimer] = useState(5);
   const [games, setGames] = useState([]);
   const [selectedGames, setSelectedGames] = useState<{ id: any; aggregated_rating: any; name?: string; }[]>([]);
   const [score, setScore] = useState(0);
@@ -31,6 +34,29 @@ const GameTrivia = () => {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const startTimer = () => {
+    const startTime = Date.now();
+    if (Ref.current) clearInterval(Ref.current);
+  
+    setTimer(5000);
+  
+    const id = window.setInterval(() => {
+      const elapsedTime = Date.now() - startTime;
+      const timeLeft = 5000 - elapsedTime;
+  
+      if (timeLeft <= 0) {
+        clearInterval(id);
+        setGameOver(true);
+        setTimer(0);
+      } else {
+        setTimer(timeLeft);
+      }
+    }, 10);
+  
+    Ref.current = id;
+  };
+  
 
   const initializeGame = async () => {
     setLoading(true);
@@ -40,10 +66,12 @@ const GameTrivia = () => {
       setSelectedGames(getRandomGames(fetchedGames));
     }
     setLoading(false);
+    startTimer();
   };
 
   useEffect(() => {
     initializeGame();
+    startTimer();
   }, []);
 
   const handleSelection = (selectedGame: { id: any; aggregated_rating: any; name?: string; }) => {
@@ -57,6 +85,7 @@ const GameTrivia = () => {
     if (selectedGame.aggregated_rating > otherGame.aggregated_rating) {
       setScore(score + 1);
       setSelectedGames(getRandomGames(games));
+      startTimer();
     } else {
       setGameOver(true);
     }
@@ -128,6 +157,7 @@ const GameTrivia = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.scoreText}>{(timer / 1000).toFixed(2)}s</Text>
       <Text style={styles.scoreText}>Score: {score}</Text>
       <Text style={styles.scoreText}>Which game has the higher rating?</Text>
       {selectedGames.map(game => (

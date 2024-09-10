@@ -10,7 +10,7 @@ const HomePage = () => {
         <Text style={styles.sectionTitle}>How the Game Works</Text>
         <Text style={styles.sectionDescription}>
           Test your knowledge with my trivia game! 
-          Pick which game you think has the higher ranking! If you're right,
+          You have 5 seconds to pick which game you think has the higher ranking! If you're right,
           you'll add to your score. If you're wrong, it's Game Over!
           Compete with friends or challenge yourself to beat your own high score!
         </Text>
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   sectionDescription: {
     fontSize: 16,
     marginBottom: 20,
+    textAlign: 'center',
   },
   button: {
     marginVertical: 10,
