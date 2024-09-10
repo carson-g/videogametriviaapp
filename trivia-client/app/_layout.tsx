@@ -6,11 +6,10 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Platform } from 'react-native';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-document.title = "Video Game Trivia";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -21,6 +20,9 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+    }
+    if (Platform.OS === 'web') {
+      document.title = "Video Game Trivia";
     }
   }, [loaded]);
 

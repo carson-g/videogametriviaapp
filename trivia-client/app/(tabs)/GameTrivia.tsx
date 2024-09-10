@@ -36,23 +36,27 @@ const GameTrivia = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const startTimer = () => {
+    const startTime = Date.now();
     if (Ref.current) clearInterval(Ref.current);
-
+  
     setTimer(5000);
-
+  
     const id = window.setInterval(() => {
-      setTimer((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(id);
-          setGameOver(true);
-          return 0;
-        }
-        return prevTime - 10;
-      });
+      const elapsedTime = Date.now() - startTime;
+      const timeLeft = 5000 - elapsedTime;
+  
+      if (timeLeft <= 0) {
+        clearInterval(id);
+        setGameOver(true);
+        setTimer(0);
+      } else {
+        setTimer(timeLeft);
+      }
     }, 10);
-
+  
     Ref.current = id;
   };
+  
 
   const initializeGame = async () => {
     setLoading(true);
